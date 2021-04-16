@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+  nginx:
+    image: nginx:alpine
+    networks:
+      - challenge-net
+    ports:
+      - "3000:80"
+    volumes:
+      - ./nginx:/etc/nginx
+
+  write_app:
+    image: py-redis-write:0.1
+    networks:
+      - challenge-net
+    ports:
+      - "3001:80"
+  
+  read_app:
+    image: py-redis-read:0.1
+    networks:
+      - challenge-net
+    ports:
+      - "3002:80"
+
+  redis:
+    image: redis:alpine
+    networks:
+      - challenge-net
+
+networks:
+  challenge-net:
+    name: ${COMPOSE_NETWORK}
